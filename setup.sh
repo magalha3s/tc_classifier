@@ -1,12 +1,18 @@
 #!/bin/bash
 
 # Create virtual environment
-python -m venv .venv
+
+if [[ "$(hostname)" == *"bancada"* ]]; then
+    virtualenv -p python .venv
+else
+    python -m venv .venv
+fi
 
 # Activate virtual environment
 source .venv/bin/activate
 
 # Install dependencies
-pip install torch matplotlib numpy
+pip install --upgrade pip
+pip install torch torchvision matplotlib numpy pandas Pillow
 
 echo "Environment setup completed successfully!"
