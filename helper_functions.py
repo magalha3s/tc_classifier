@@ -7,7 +7,7 @@ def truth_table(y_preds: torch.Tensor , y_labels: torch.Tensor) -> tuple:
     # TP, FP, TN, FN
     table = {"11":0, "10":0, "00":0, "01":0}
     for pred, label in zip(y_preds, y_labels):
-        table[f"{pred}{label}"]+=1
+        table[f"{pred.item()}{label.item()}"]+=1
 
     return tuple(table.values())
 
@@ -50,3 +50,8 @@ def plot_roc_curve(specificity : list, sensitivity : list) -> None:
     ax.legend()
 
     plt.show()
+
+def model_refactor_tc(model: torch.nn.Module):
+    for parameter in model.feature.parameters():
+        parameter.requires_grad = False
+    

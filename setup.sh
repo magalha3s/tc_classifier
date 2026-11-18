@@ -13,6 +13,6 @@ source .venv/bin/activate
 
 # Install dependencies
 pip install --upgrade pip
-pip install torch torchvision matplotlib numpy pandas Pillow
+pip install torch torchvision matplotlib numpy pandas Pillow torchxrayvision
 
 echo "Environment setup completed successfully!"
