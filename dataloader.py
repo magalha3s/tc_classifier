@@ -5,7 +5,6 @@ from pathlib import Path
 
 # External libs
 import pandas as pd
-import torchvision.transforms as transforms
 from PIL import Image
 import torch
 import copy

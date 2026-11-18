@@ -51,7 +51,9 @@ def plot_roc_curve(specificity : list, sensitivity : list) -> None:
 
     plt.show()
 
-def model_refactor_tc(model: torch.nn.Module):
-    for parameter in model.feature.parameters():
-        parameter.requires_grad = False
+def set_seeds(seed: int=67):
+    # Set the seed for general torch operations
+    torch.manual_seed(seed)
+    # Set the seed for CUDA torch operations (ones that happen on the GPU)
+    torch.cuda.manual_seed(seed)
     
