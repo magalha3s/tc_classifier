@@ -18,7 +18,7 @@ fi
 
 
 # Create virtual environment
-if [[ "$(cat /etc/hostname)" == *"bancada"* ]]; then
+if [[ "$(cat /etc/hostname)" == *"bancada"* || "$(cat /etc/hostname)" == *"caloba"* ]]; then
     virtualenv -p python .venv
 else
     python -m venv .venv
@@ -29,6 +29,6 @@ source .venv/bin/activate
 
 # Install dependencies
 pip install --progress-bar off --upgrade pip
-pip install --progress-bar off torch torchvision matplotlib numpy pandas Pillow torchxrayvision gdown
+pip install --progress-bar off torch torchvision matplotlib numpy pandas Pillow torchxrayvision
 
 echo -e "\033[32mEnvironment setup completed successfully!\033[0m"
