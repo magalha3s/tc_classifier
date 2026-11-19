@@ -18,7 +18,7 @@ fi
 
 
 # Create virtual environment
-if [[ "$(hostname)" == *"bancada"* ]]; then
+if [[ "$(cat /etc/hostname)" == *"bancada"* ]]; then
     virtualenv -p python .venv
 else
     python -m venv .venv
@@ -28,20 +28,7 @@ fi
 source .venv/bin/activate
 
 # Install dependencies
-pip install --quiet --upgrade pip
-pip install --quiet torch torchvision matplotlib numpy pandas Pillow torchxrayvision gdown
+pip install --progress-bar off --upgrade pip
+pip install --progress-bar off torch torchvision matplotlib numpy pandas Pillow torchxrayvision gdown
 
-clear
-
-echo -e "\033[32mEnvironment setup completed successfully!"
-echo -e "Starting weights download!\033[0m"
-
-# Setup file name and id
-FILEID=""
-FILENAME=""
-
-# Download weights
-if ! gdown "$FILEID" -O "$FILENAME" --continue --retries 5; then
-    printf "\033[0;31mInvalid fileid or filename. Download failed!\033[0m\n"
-    exit 1
-fi
+echo -e "\033[32mEnvironment setup completed successfully!\033[0m"

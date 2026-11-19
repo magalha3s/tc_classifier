@@ -2,6 +2,7 @@
 import pickle
 import copy 
 from pathlib import Path
+from typing import Annotated
 
 # External libs
 import pandas as pd
@@ -53,16 +54,16 @@ class K_DataLoader():
         self.image_dataset  = {"train":[], "test":[], "validation":[]}
         self.label_dataset  = {"train":[], "test":[], "validation":[]}
 
-        self.prepare_kfold()
+        self._prepare_kfold()
 
-    def prepare_kfold(self):
+    def _prepare_kfold(self) -> None:
         path_column = self.shenzenFrame["image_path"]
         index_image = {}
 
         # Create a dict with the images converted to tensors for efficiency, avoiding to reload the image dict every fold iteration
         for index, path in zip(path_column.index, path_column):
             with Image.open(Path(path)) as img:
-                index_image[index] = tc.default_transform(img).to(self.device)
+                index_image[index] = tc.default_transform(img).to("cpu")
 
         # Make a shallowcopy of images to use them as pointers
         # May need to adujust .to(device) settings to "cpu" and send to "cuda" by batch to reduce VRAM usage (this will decrease training speed).
@@ -79,7 +80,7 @@ class K_DataLoader():
                     self.label_dataset[_type].append(label_n)
                     self.image_dataset[_type].append(image_n)
 
-    def __getitem__(self, key: tuple) -> tuple:
+    def __getitem__(self, key : tuple[str, int]) -> tuple[torch.Tensor, torch.Tensor] | tuple[tuple[torch.Tensor],tuple[torch.Tensor]]:
         
         # Detects invalid indexes
         if key[0] not in self.batch_types:
@@ -88,7 +89,7 @@ class K_DataLoader():
         # Only training data is sent in split format
         else:
             if key[0] == "train":
-                return torch.split(torch.stack(self.image_dataset[key[0]][key[1]]),self.batch_size), torch.split(torch.stack(self.label_dataset[key[0]][key[1]]),self.batch_size)
+                return zip(torch.split(torch.stack(self.image_dataset[key[0]][key[1]]),self.batch_size).to(self.device), torch.split(torch.stack(self.label_dataset[key[0]][key[1]]),self.batch_size).to(self.device))
             else:
-                return torch.stack(self.image_dataset[key[0]][key[1]]),torch.stack(self.label_dataset[key[0]][key[1]])
+                return zip(torch.stack(self.image_dataset[key[0]][key[1]]).to(self.device),torch.stack(self.label_dataset[key[0]][key[1]]).to(self.device))
 
