@@ -1,0 +1,6 @@
+.venv/
+.venvjupyter/
+__pycache__/
+*test*
+*visualize*
+log.csv

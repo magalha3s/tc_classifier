@@ -1,0 +1,11 @@
+# ML model
+torch 
+torchvision 
+torchxrayvision
+
+# Data and plotting
+matplotlib 
+numpy 
+pandas 
+Pillow
+rich
